@@ -1,0 +1,23 @@
+services:
+
+  db:
+    image: postgres
+    container_name: nestjs_database
+    restart: always
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+    ports:
+      - 5432:${DB_PORT}
+  nest:
+    build: .
+    container_name: nestjs_api
+    depends_on:
+      - db
+    volumes:
+      - .:/usr/src/app
+    env_file: .env
+    restart: always
+    ports:
+      - '3000:3000'
